@@ -36,6 +36,9 @@
 *.exe
 *.out
 *.app
+.env
 
 # debug information files
 *.dwo
+
+build/
