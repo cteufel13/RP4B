@@ -16,7 +16,7 @@ public:
     void show_keys();
 
     // Order Positions
-    std::string submit_order(const Order order_data);
+    std::string submit_order(const Order &order_data);
 
     // Core Positions
     std::string get_all_positions();

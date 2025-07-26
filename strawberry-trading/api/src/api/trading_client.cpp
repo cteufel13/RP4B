@@ -28,8 +28,11 @@ void TradingClient::show_keys()
     std::cout << "Public Key:" << public_key << " Private Key:" << private_key << std::endl;
 }
 
-std::string TradingClient::submit_order(const Order order_data) {
-
+std::string TradingClient::submit_order(const Order &order_data)
+{
+    std::string extension = "/orders";
+    std::string payload = order_data.to_fields();
+    return http_client->POST(extension, payload);
 };
 
 // Core Positions
@@ -68,7 +71,6 @@ std::string TradingClient::get_option_contracts(GetOptionContractsRequest reques
 {
     std::string extension = "/options/contracts";
     std::string parameters = request.to_fields();
-    std::cout << parameters << std::endl;
     return http_client->GET(extension, parameters);
 };
 std::string TradingClient::get_option_contract(const std::string symbol_asset_id)

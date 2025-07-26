@@ -1,21 +1,68 @@
 #include <trading/enums.hpp>
 #include <string>
 
-const std::string OrderType::MARKET = "market";
-const std::string OrderType::LIMIT = "limit";
-const std::string OrderType::STOP = "stop";
-const std::string OrderType::STOP_LIMIT = "stop_limit";
-const std::string OrderType::TRAILING_STOP = "trailing_stop";
+std::string type2string(OrderType type)
+{
+    switch (type)
+    {
+    case OrderType::MARKET:
+        return "market";
 
-const std::string TimeInForce::DAY = "day";
-const std::string TimeInForce::GTC = "gtc";
-const std::string TimeInForce::OPG = "opg";
-const std::string TimeInForce::CLS = "cls";
-const std::string TimeInForce::IOC = "ioc";
-const std::string TimeInForce::FOK = "fok";
+    case OrderType::LIMIT:
+        return "limit";
 
-const std::string OrderClass::SIMPLE = "simple";
-const std::string OrderClass::MLEG = "mleg";
-const std::string OrderClass::BRACKET = "bracket";
-const std::string OrderClass::OCO = "oco";
-const std::string OrderClass::OTO = "oto";
+    case OrderType::STOP:
+        return "stop";
+    case OrderType::STOP_LIMIT:
+        return "stop_limit";
+    case OrderType::TRAILING_STOP:
+        return "trailing_stop";
+    }
+};
+
+std::string tif2string(TimeInForce tif)
+{
+    switch (tif)
+    {
+    case TimeInForce::DAY:
+        return "day";
+    case TimeInForce::GTC:
+        return "gtc";
+    case TimeInForce::OPG:
+        return "opg";
+    case TimeInForce::CLS:
+        return "cls";
+    case TimeInForce::IOC:
+        return "ioc";
+    case TimeInForce::FOK:
+        return "fok";
+    }
+};
+
+std::string class2string(OrderClass orderclass)
+{
+    switch (orderclass)
+    {
+    case OrderClass::SIMPLE:
+        return "simple";
+    case OrderClass::MLEG:
+        return "mleg";
+    case OrderClass::BRACKET:
+        return "BRACKET";
+    case OrderClass::OCO:
+        return "oco";
+    case OrderClass::OTO:
+        return "oto";
+    }
+};
+
+std::string side2string(OrderSide side)
+{
+    switch (side)
+    {
+    case OrderSide::BUY:
+        return "buy";
+    case OrderSide::SELL:
+        return "sell";
+    }
+}

@@ -17,7 +17,7 @@ public:
         std::optional<std::string> expiration_date_lte = std::nullopt,
         std::optional<std::string> root_symbol = std::nullopt,
         std::optional<ContractType> type = std::nullopt,
-        std::optional<ExerciseStyle> style = ExerciseStyle::EUROPEAN,
+        std::optional<ExerciseStyle> style = ExerciseStyle::AMERICAN,
         std::optional<std::string> strike_price_gte = std::nullopt,
         std::optional<std::string> strike_price_lte = std::nullopt,
         std::optional<int> limit = std::nullopt,

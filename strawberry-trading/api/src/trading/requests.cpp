@@ -48,7 +48,6 @@ std::string to_query_string(std::string jstring)
     result.erase(std::remove(result.begin(), result.end(), '['), result.end());
     result.erase(std::remove(result.begin(), result.end(), ']'), result.end());
 
-    std::cout << result << std::endl;
     return result;
 };
 
@@ -146,6 +145,5 @@ std::string GetOptionContractsRequest::to_fields()
         j["page_token"] = *page_token;
 
     std::string json_string = j.dump(); // Serialize to JSON string
-    std::cout << json_string << std::endl;
     return to_query_string(json_string);
 }

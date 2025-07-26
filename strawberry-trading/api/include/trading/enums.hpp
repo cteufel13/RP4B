@@ -3,35 +3,38 @@
 
 #include <string>
 
-class OrderType
+enum class OrderType
 {
-public:
-    static const std::string MARKET;
-    static const std::string LIMIT;
-    static const std::string STOP;
-    static const std::string STOP_LIMIT;
-    static const std::string TRAILING_STOP;
+    MARKET,
+    LIMIT,
+    STOP,
+    STOP_LIMIT,
+    TRAILING_STOP,
 };
 
-class TimeInForce
+enum class TimeInForce
 {
-public:
-    static const std::string DAY;
-    static const std::string GTC;
-    static const std::string OPG;
-    static const std::string CLS;
-    static const std::string IOC;
-    static const std::string FOK;
+    DAY,
+    GTC,
+    OPG,
+    CLS,
+    IOC,
+    FOK,
 };
 
-class OrderClass
+enum class OrderClass
 {
-public:
-    static const std::string SIMPLE;
-    static const std::string MLEG;
-    static const std::string BRACKET;
-    static const std::string OCO;
-    static const std::string OTO;
+    SIMPLE,
+    MLEG,
+    BRACKET,
+    OCO,
+    OTO,
+};
+
+enum class OrderSide
+{
+    BUY,
+    SELL,
 };
 
 enum class AssetStatus
@@ -52,5 +55,10 @@ enum class ExerciseStyle
     AMERICAN,
     EUROPEAN
 };
+
+std::string type2string(OrderType type);
+std::string tif2string(TimeInForce tif);
+std::string class2string(OrderClass orderclass);
+std::string side2string(OrderSide side);
 
 #endif // ORDERTYPES_H

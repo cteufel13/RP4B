@@ -30,6 +30,7 @@ std::string HTTPClient::makeRequest(const std::string &method, const std::string
         if (parameters.has_value())
         {
             url += "?" + parameters.value();
+            std::cout << url << std::endl;
         }
 
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
