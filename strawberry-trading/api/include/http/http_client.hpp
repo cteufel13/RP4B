@@ -2,13 +2,15 @@
 
 #include <string>
 #include <map>
+#include <optional>
 
 class HTTPClient
 {
 public:
     HTTPClient(const std::string &public_key, const std::string &private_key, bool paper_trading);
 
-    std::string GET(const std::string &end_point);
+    std::string GET(const std::string &end_point,
+                    const std::optional<std::string> &body = "");
 
     std::string POST(const std::string &end_point,
                      const std::string &body);
@@ -26,5 +28,5 @@ private:
     std::string public_key;
     std::string private_key;
 
-    std::string makeRequest(const std::string &method, const std::string &endpoint, const std::string &body = "");
+    std::string makeRequest(const std::string &method, const std::string &endpoint, const std::optional<std::string> &body = "", const std::optional<std::string> &parameters = "");
 };

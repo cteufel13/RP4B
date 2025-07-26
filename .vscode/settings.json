@@ -41,6 +41,16 @@
         "variant": "cpp",
         "algorithm": "cpp",
         "iostream": "cpp",
-        "map": "cpp"
-    }
+        "map": "cpp",
+        "memory_resource": "cpp",
+        "vector": "cpp",
+        "optional": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "unordered_map": "cpp",
+        "__split_buffer": "cpp",
+        "array": "cpp"
+    },
+    "cmake.sourceDirectory": "/Users/carloteufel/Documents/Projects/RP4B/strawberry-trading",
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -34,4 +34,23 @@ public:
     static const std::string OTO;
 };
 
+enum class AssetStatus
+{
+    ACTIVE,
+    INACTIVE,
+
+};
+
+enum class ContractType
+{
+    CALL,
+    PUT
+};
+
+enum class ExerciseStyle
+{
+    AMERICAN,
+    EUROPEAN
+};
+
 #endif // ORDERTYPES_H

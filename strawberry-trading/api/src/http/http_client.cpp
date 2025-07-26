@@ -1,5 +1,7 @@
 #include <http/http_client.hpp>
 #include <curl/curl.h>
+#include <optional>
+#include <iostream>
 
 HTTPClient::HTTPClient(const std::string &public_key, const std::string &private_key, bool paper_trading)
     : public_key(public_key), private_key(private_key)
@@ -11,9 +13,9 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void *use
 {
     ((std::string *)userp)->append((char *)contents, size * nmemb);
     return size * nmemb;
-}
+};
 
-std::string HTTPClient::makeRequest(const std::string &method, const std::string &endpoint, const std::string &body)
+std::string HTTPClient::makeRequest(const std::string &method, const std::string &endpoint, const std::optional<std::string> &body, const std::optional<std::string> &parameters)
 {
     CURL *curl;
     CURLcode res;
@@ -24,7 +26,14 @@ std::string HTTPClient::makeRequest(const std::string &method, const std::string
     if (curl)
     {
         std::string url = baseURL + endpoint;
+
+        if (parameters.has_value())
+        {
+            url += "?" + parameters.value();
+        }
+
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
         struct curl_slist *headers = nullptr; // pointer to the headers strings, curl_slist appends creates LL?
         headers = curl_slist_append(headers, ("APCA-API-KEY-ID: " + public_key).c_str());
@@ -36,7 +45,7 @@ std::string HTTPClient::makeRequest(const std::string &method, const std::string
         if (method == "POST") // PRELIM CURL prep to send POST
         {
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.value().c_str());
         }
         else if (method == "DELETE") // PRELIM CURL prep to send DELETE
         {
@@ -46,12 +55,12 @@ std::string HTTPClient::makeRequest(const std::string &method, const std::string
         else if (method == "PUT")
         {
             curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.value().c_str());
         }
         else if (method == "PATCH")
         {
             curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.value().c_str());
         }
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback); // gives it function to explain it how to read/write Callbacks
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);       // adds chunks of response to the readBuffer
@@ -63,9 +72,9 @@ std::string HTTPClient::makeRequest(const std::string &method, const std::string
     return readBuffer;
 };
 
-std::string HTTPClient::GET(const std::string &end_point)
+std::string HTTPClient::GET(const std::string &end_point, const std::optional<std::string> &parameters)
 {
-    return makeRequest("GET", end_point);
+    return makeRequest("GET", end_point, std::nullopt, parameters.value());
 };
 
 std::string HTTPClient::POST(const std::string &end_point, const std::string &body)
