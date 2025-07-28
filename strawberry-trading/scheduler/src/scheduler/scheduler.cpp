@@ -22,6 +22,7 @@ void update_tasks(std::vector<Task> &tasks, const std::chrono::time_point<std::c
     {
         if (task.nextRun <= now)
         {
+            std::cout << "Time:" << now;
             task.func();
             task.nextRun = now + task.interval;
         };
@@ -32,22 +33,18 @@ void Scheduler::run()
 {
     while (running)
     {
-        std::cout << "now1" << std::endl;
         auto now = std::chrono::system_clock::now();
         std::vector<Task>::iterator nextTask = std::min_element(tasks.begin(), tasks.end(), earlier_run); // finds next Task to work on
-
         if (nextTask == tasks.end())
         {
             break;
         }
 
-        std::chrono::seconds sleepTime = std::chrono::duration_cast<std::chrono::seconds>(nextTask->nextRun - now);
+        auto sleepTime = nextTask->nextRun - now;
 
         while (sleepTime > std::chrono::seconds(0) && running)
         {
-            std::chrono::seconds chunk = std::min(sleepTime, std::chrono::seconds(10)); // updates every min
-            std::cout << chunk << std::endl;
-
+            auto chunk = std::min(sleepTime, std::chrono::duration_cast<decltype(sleepTime)>(std::chrono::seconds(60))); // updates every min
             std::this_thread::sleep_for(chunk);
             sleepTime -= chunk;
         }
