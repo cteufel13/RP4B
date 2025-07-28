@@ -1,0 +1,16 @@
+file(GLOB_RECURSE SCHEDULER_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp"
+)
+
+file(GLOB_RECURSE SCHEDULER_HEADERS CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.hpp"
+)
+
+
+add_library(scheduler STATIC ${SCHEDULER_SOURCES} ${SCHEDULER_HEADERS})
+
+target_include_directories(scheduler
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+

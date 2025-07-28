@@ -12,4 +12,5 @@ find_package(nlohmann_json 3.12.0 REQUIRED)
 
 add_subdirectory(api)
 add_subdirectory(apps)
+add_subdirectory(scheduler)
 
