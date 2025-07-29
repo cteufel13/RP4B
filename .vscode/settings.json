@@ -50,7 +50,9 @@
         "unordered_map": "cpp",
         "__split_buffer": "cpp",
         "array": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp"
     },
     "cmake.sourceDirectory": "/Users/carloteufel/Documents/Projects/RP4B/strawberry-trading",
     "C_Cpp.errorSquiggles": "disabled"

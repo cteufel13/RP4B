@@ -4,5 +4,5 @@ target_link_libraries(paper_trader
     PRIVATE
         api
         scheduler
-
+        logging
 )
