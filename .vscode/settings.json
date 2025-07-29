@@ -55,7 +55,9 @@
         "iomanip": "cpp",
         "__node_handle": "cpp",
         "charconv": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp"
     },
     "cmake.sourceDirectory": "/Users/carloteufel/Documents/Projects/RP4B/strawberry-trading",
     "C_Cpp.errorSquiggles": "disabled"

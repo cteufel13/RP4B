@@ -1,4 +1,5 @@
 #include <api/trading_client.hpp>
+#include <api/market_data_client.hpp>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -18,12 +19,12 @@ void say_bingbong()
 
 int main()
 {
-    TradingClient client;
-    Order order = Order("SPY", 2.0, std::nullopt, OrderSide::BUY, OrderType::MARKET, TimeInForce::DAY, OrderClass::SIMPLE);
-    std::cout << client.submit_order(order) << std::endl;
-    std::vector<std::string> underlying = {"SPY"};
-    GetOptionContractsRequest options = GetOptionContractsRequest(underlying);
-    std::cout << client.get_option_contracts(options) << std::endl;
+    // TradingClient client;
+    // Order order = Order("SPY", 2.0, std::nullopt, OrderSide::BUY, OrderType::MARKET, TimeInForce::DAY, OrderClass::SIMPLE);
+    // std::cout << client.submit_order(order) << std::endl;
+    // std::vector<std::string> underlying = {"SPY"};
+    // GetOptionContractsRequest options = GetOptionContractsRequest(underlying);
+    // std::cout << client.get_option_contracts(options) << std::endl;
 
     // Scheduler scheduler;
     // scheduler.addTask(say_hello, std::chrono::seconds(20));
@@ -41,6 +42,9 @@ int main()
 
     // logger.set_log_file("log.txt");
     // logger.info("starting the paper trader");
-
+    std::vector<std::string> symbols = {"AAPL"};
+    MarketClient client;
+    StockLatestBarRequest req = StockLatestBarRequest(symbols);
+    std::cout << client.get_latest_bars(req) << std::endl;
     return 0;
 }

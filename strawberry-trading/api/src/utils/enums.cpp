@@ -1,4 +1,4 @@
-#include <trading/enums.hpp>
+#include <utils/enums.hpp>
 #include <string>
 
 std::string type2string(OrderType type)

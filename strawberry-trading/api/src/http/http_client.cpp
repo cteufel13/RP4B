@@ -3,11 +3,8 @@
 #include <optional>
 #include <iostream>
 
-HTTPClient::HTTPClient(const std::string &public_key, const std::string &private_key, bool paper_trading)
-    : public_key(public_key), private_key(private_key)
-{
-    baseURL = paper_trading ? "https://paper-api.alpaca.markets/v2" : "https://api.alpaca.markets/v2";
-};
+HTTPClient::HTTPClient(const std::string &public_key, const std::string &private_key, const std::string &baseurl)
+    : public_key(public_key), private_key(private_key), baseURL(baseurl) {};
 
 static size_t writeCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {

@@ -3,8 +3,8 @@
 #include <string>
 #include <memory>
 #include <http/http_client.hpp>
-#include <trading/order.hpp>
-#include <trading/requests.hpp>
+#include <utils/order.hpp>
+#include <utils/requests.hpp>
 
 class TradingClient
 {

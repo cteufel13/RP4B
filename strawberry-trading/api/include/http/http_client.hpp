@@ -7,7 +7,7 @@
 class HTTPClient
 {
 public:
-    HTTPClient(const std::string &public_key, const std::string &private_key, bool paper_trading);
+    HTTPClient(const std::string &public_key, const std::string &private_key, const std::string &baseurl);
 
     std::string GET(const std::string &end_point,
                     const std::optional<std::string> &body = "");

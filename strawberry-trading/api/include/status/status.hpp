@@ -1,13 +1,15 @@
+#pragma once
+#include <string>
 
 enum class Status
 {
-    200,
-    201,
-    400,
-    403,
-    404,
-    429,
-    500,
+    OK = 200,
+    Created = 201,
+    BadRequest = 400,
+    Forbidden = 403,
+    NotFound = 404,
+    TooManyRequests = 429,
+    InternalServerError = 500,
 };
 
 std::string status_string(Status error);

@@ -1,7 +1,7 @@
 #include <api/trading_client.hpp>
 #include <env/env.hpp>
 #include <http/http_client.hpp>
-#include <trading/requests.hpp>
+#include <utils/requests.hpp>
 #include <memory>
 #include <iostream>
 
@@ -18,7 +18,7 @@ void TradingClient::init()
     private_key = priv_key;
 
     // HTTP Client
-    http_client = std::make_shared<HTTPClient>(pub_key, priv_key, true);
+    http_client = std::make_shared<HTTPClient>(pub_key, priv_key, "https://paper-api.alpaca.markets/v2");
 }
 
 void TradingClient::show_keys()

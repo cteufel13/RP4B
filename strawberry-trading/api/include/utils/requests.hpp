@@ -4,7 +4,8 @@
 #include <map>
 #include <optional>
 #include <vector>
-#include <trading/enums.hpp>
+#include <utils/enums.hpp>
+#include <utils/data.hpp>
 
 class GetOptionContractsRequest
 {
@@ -36,5 +37,35 @@ public:
     std::optional<int> limit;
     std::optional<std::string> page_token;
 
-    std::string to_fields();
+    std::string to_fields() const;
+};
+
+class StockBarsRequest
+{
+public:
+    StockBarsRequest(
+        std::vector<std::string> symbols,
+        TimeFrame tframe,
+        std::optional<std::string> start = std::nullopt,
+        std::optional<std::string> end = std::nullopt,
+        std::optional<int> limit = std::nullopt);
+
+    std::vector<std::string> symbols;
+    TimeFrame tframe;
+    std::optional<std::string>
+        start;
+    std::optional<std::string> end;
+    std::optional<int> limit;
+
+    std::string to_fields() const;
+};
+
+class StockLatestBarRequest
+{
+public:
+    StockLatestBarRequest(
+        std::vector<std::string> symbols);
+
+    std::vector<std::string> symbols;
+    std::string to_fields() const;
 };

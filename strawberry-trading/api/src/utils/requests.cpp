@@ -2,8 +2,9 @@
 #include <map>
 #include <optional>
 #include <vector>
-#include <trading/enums.hpp>
-#include <trading/requests.hpp>
+#include <utils/enums.hpp>
+#include <utils/requests.hpp>
+#include <utils/data.hpp>
 #include <nlohmann/json.hpp>
 #include <iostream>
 
@@ -87,8 +88,6 @@ std::string to_string(ExerciseStyle style)
     return "";
 };
 
-std::string to_string(std::string JSON) {};
-
 GetOptionContractsRequest::GetOptionContractsRequest(
     std::optional<std::vector<std::string>> underlying_symbols,
     std::optional<AssetStatus> status,
@@ -115,7 +114,7 @@ GetOptionContractsRequest::GetOptionContractsRequest(
       limit(limit),
       page_token(std::move(page_token)) {};
 
-std::string GetOptionContractsRequest::to_fields()
+std::string GetOptionContractsRequest::to_fields() const
 {
     nlohmann::json j;
 
@@ -146,4 +145,37 @@ std::string GetOptionContractsRequest::to_fields()
 
     std::string json_string = j.dump(); // Serialize to JSON string
     return to_query_string(json_string);
+}
+
+StockBarsRequest::StockBarsRequest(
+    std::vector<std::string> symbols,
+    TimeFrame tframe,
+    std::optional<std::string> start,
+    std::optional<std::string> end,
+    std::optional<int> limit) : symbols(std::move(symbols)), tframe(std::move(tframe)), start(std::move(start)), end(std::move(end)), limit(std::move(limit)) {};
+
+std::string StockBarsRequest::to_fields() const
+{
+    nlohmann::json j;
+
+    j["symbols"] = symbols;
+    j["timeframe"] = tframe.frame;
+    if (start.has_value())
+        j["start"] = start;
+    if (end.has_value())
+        j["end"] = end;
+    if (limit.has_value())
+        j["limit"] = limit;
+
+    return to_query_string(j.dump());
+};
+
+StockLatestBarRequest::StockLatestBarRequest(
+    std::vector<std::string> symbols) : symbols(std::move(symbols)) {};
+
+std::string StockLatestBarRequest::to_fields() const
+{
+    nlohmann::json j;
+    j["symbols"] = symbols;
+    return to_query_string(j.dump());
 }
