@@ -52,7 +52,10 @@
         "array": "cpp",
         "chrono": "cpp",
         "fstream": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "__node_handle": "cpp",
+        "charconv": "cpp",
+        "memory": "cpp"
     },
     "cmake.sourceDirectory": "/Users/carloteufel/Documents/Projects/RP4B/strawberry-trading",
     "C_Cpp.errorSquiggles": "disabled"

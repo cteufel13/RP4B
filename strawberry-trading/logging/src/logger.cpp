@@ -10,7 +10,7 @@ Logger &Logger::getInstance()
 };
 void Logger::set_log_file(const std::string &file_path)
 {
-    std::cout << std::string full_path = std::filesystem::current_path().string() + file_path;
+    std::string full_path = std::filesystem::current_path().string() + file_path;
     std::lock_guard<std::mutex> lock(log_mutx);
     if (file.is_open())
         file.close();

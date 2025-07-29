@@ -18,12 +18,13 @@ void say_bingbong()
 
 int main()
 {
-    // TradingClient client;
-    // Order order = Order("SPY250728C00643000", 2.0, std::nullopt, OrderSide::BUY, OrderType::MARKET, TimeInForce::DAY, OrderClass::SIMPLE);
-    // std::cout << client.submit_order(order) << std::endl;
-    // std::vector<std::string> underlying = {"SPY"};
-    // GetOptionContractsRequest options = GetOptionContractsRequest(underlying);
-    // std::cout << client.get_option_contracts(options) << std::endl;
+    TradingClient client;
+    Order order = Order("SPY", 2.0, std::nullopt, OrderSide::BUY, OrderType::MARKET, TimeInForce::DAY, OrderClass::SIMPLE);
+    std::cout << client.submit_order(order) << std::endl;
+    std::vector<std::string> underlying = {"SPY"};
+    GetOptionContractsRequest options = GetOptionContractsRequest(underlying);
+    std::cout << client.get_option_contracts(options) << std::endl;
+
     // Scheduler scheduler;
     // scheduler.addTask(say_hello, std::chrono::seconds(20));
     // scheduler.addTask(say_bingbong, std::chrono::seconds(10));
@@ -38,8 +39,8 @@ int main()
     // sched_thread.join(); // Wait for thread to finish
     // std::cout << "[Main] Done.\n";
 
-    logger.set_log_file("log.txt");
-    logger.info("starting the paper trader");
+    // logger.set_log_file("log.txt");
+    // logger.info("starting the paper trader");
 
     return 0;
 }

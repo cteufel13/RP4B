@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <api/trading_client.hpp>
 #include <env/env.hpp>
 #include <http/http_client.hpp>
