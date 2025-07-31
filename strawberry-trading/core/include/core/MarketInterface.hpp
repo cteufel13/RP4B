@@ -3,7 +3,11 @@
 #include <api/trading_client.hpp>
 #include <common/optionchain.hpp>
 #include <common/option.hpp>
+#include <common/position.hpp>
+#include <common/timeseries.hpp>
 #include <utils/json.hpp>
+#include <utils/position_utils.hpp>
+#include <utils/timeseries_utils.hpp>
 
 #include <string>
 
@@ -20,12 +24,22 @@ public:
                TimeInForce time_in_force = TimeInForce::DAY,
                OrderClass orderclass = OrderClass::SIMPLE,
                bool extended_hours = false); // handles interaction with Order Class
-    std::string getAllPositions();
-    std::string getOpenPosition();
-    std::string closeAllPositions();
-    std::string closePosition();
-    std::string getPortfolioHistory();
-    std::string getOptionContracts();
+    std::vector<Position> getAllPositions();
+    Position getOpenPosition(const std::string &symbol_or_asset_id);
+    void closeAllPositions();
+    void closePosition(const std::string &symbol_or_asset_id);
+    TimeSeries getPortfolioHistory();
+    std::string getOptionContracts(std::vector<std::string> underlying_symbols,
+                                   AssetStatus status = AssetStatus::ACTIVE,
+                                   std::optional<std::string> expiration_date,
+                                   std::optional<std::string> expiration_date_gte,
+                                   std::optional<std::string> expiration_date_lte,
+                                   std::optional<std::string> root_symbol,
+                                   ContractType type = ContractType::CALL,
+                                   ExerciseStyle style = ExerciseStyle::AMERICAN,
+                                   std::optional<std::string> strike_price_gte,
+                                   std::optional<std::string> strike_price_lte,
+                                   std::optional<int> limit, );
     std::string getOptionContract();
 
     // Market Data:

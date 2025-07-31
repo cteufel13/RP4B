@@ -61,7 +61,8 @@ int main()
     // savejson(options_chain, "OptionsChains.txt");
 
     MarketInterface marketinterface = MarketInterface();
-    marketinterface.getAllPositions();
+    // std::cout<<marketinterface.order("SPY");
+    marketinterface.getPortfolioHistory();
 
     return 0;
 }

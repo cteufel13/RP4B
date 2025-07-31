@@ -40,8 +40,95 @@ bool MarketInterface::order(std::string symbol,
     };
 };
 
-std::string MarketInterface::getAllPositions()
+std::vector<Position> MarketInterface::getAllPositions()
 {
     std::string response = trading_client.get_all_positions();
-    std::cout << response << std::endl;
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (response_json.size() == 0)
+    {
+        logger.warning("[MarketInterface::getAllPositions] Positions is empty");
+        return std::vector<Position>();
+    }
+    else
+    {
+        std::vector<Position> positions;
+        for (const auto &pos : response_json)
+        {
+            positions.push_back(parsePosition(pos));
+        }
+        logger.info("[MarketInterface::getAllPositions] Retrieved Positions");
+        return positions;
+    }
+};
+
+Position MarketInterface::getOpenPosition(const std::string &symbol_or_asset_id)
+{
+    std::string response = trading_client.get_open_position(symbol_or_asset_id);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (response_json.contains("code"))
+    {
+        logger.error("[MarketInterface::getOpenPosition] Position could not be found.");
+        return Position{};
+    }
+    else
+    {
+        Position position = parsePosition(response_json);
+        logger.info("[MarketInterface::getOpenPosition] Retrieved position of " + symbol_or_asset_id + ".");
+        return position;
+    };
+};
+
+void MarketInterface::closeAllPositions()
+{
+    std::string response = trading_client.close_all_positions();
+    logger.info("[MarketInterface::getOpenPosition] Closed all positions.");
+};
+
+void MarketInterface::closePosition(const std::string &symbol_or_asset_id)
+{
+    std::string response = trading_client.close_position(symbol_or_asset_id);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (response_json.contains("code"))
+    {
+        logger.error("[MarketInterface::closePosition] Position could not be found.");
+    }
+    else
+    {
+        logger.info("[MarketInterface::closePosition] Closed Position of " + symbol_or_asset_id + ".");
+    };
+};
+
+TimeSeries MarketInterface::getPortfolioHistory()
+{
+    std::string response = trading_client.get_portfolio_history();
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (response_json.contains("code"))
+    {
+        logger.error("[MarketInterface::getPortfolioHistory] History could not be found.");
+        return TimeSeries{};
+    }
+
+    TimeSeries series;
+
+    std::vector<int64_t> timestamps = response_json["timestamp"];
+    std::vector<double> equity = response_json["equity"];
+    std::vector<double> profit_loss = response_json["profit_loss"];
+    std::vector<double> profit_loss_pct = response_json["profit_loss_pct"];
+
+    for (size_t i = 0; i < timestamps.size(); ++i)
+    {
+        TimeSeriesPoint point;
+        point.timestamp = from_unix_timestamp(timestamps[i]);
+        point.values["equity"] = equity[i];
+        point.values["profit_loss"] = profit_loss[i];
+        point.values["profit_loss_pct"] = profit_loss_pct[i];
+        series.addPoint(point);
+    }
+    return series;
+};
+
+std::string MarketInterface::getOptionContracts()
+{
+    GetOptionContractsRequest req = GetOptionContractsRequest();
+    std::string response = trading_client.get_option_contracts()
 };
