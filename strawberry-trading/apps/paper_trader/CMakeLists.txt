@@ -5,4 +5,5 @@ target_link_libraries(paper_trader
         api
         scheduler
         logging
+        core
 )

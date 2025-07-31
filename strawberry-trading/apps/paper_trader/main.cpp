@@ -1,11 +1,15 @@
 #include <api/trading_client.hpp>
 #include <api/market_data_client.hpp>
+#include <api/option_data_client.hpp>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <scheduler/scheduler.hpp>
 #include <logger_alias.hpp>
+#include <utils/json.hpp>
 #include <thread>
+#include <common/optionchain.hpp>
+#include <core/MarketInterface.hpp>
 
 void say_hello()
 {
@@ -42,9 +46,22 @@ int main()
 
     // logger.set_log_file("log.txt");
     // logger.info("starting the paper trader");
-    std::vector<std::string> symbols = {"AAPL"};
-    MarketClient client;
-    StockLatestBarRequest req = StockLatestBarRequest(symbols);
-    std::cout << client.get_latest_bars(req) << std::endl;
+    // std::vector<std::string> symbols = {"AAPL"};
+    // MarketClient client;
+    // OptionLatestBarRequest req = OptionLatestBarRequest(symbols);
+    // std::cout << client.get_option_latest_bars(req) << std::endl;
+    // OptionChainRequest req = OptionChainRequest("AAPL");
+    // OptionClient client;
+
+    // std::string options_chain = client.get_options_chains(req);
+
+    // OptionChain chain = OptionChain(options_chain);
+    // auto greeks = chain.get_greeks_matrix();
+
+    // savejson(options_chain, "OptionsChains.txt");
+
+    MarketInterface marketinterface = MarketInterface();
+    marketinterface.getAllPositions();
+
     return 0;
 }
