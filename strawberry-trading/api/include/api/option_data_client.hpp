@@ -1,16 +1,13 @@
 #pragma once
 #include <http/http_client.hpp>
 #include <utils/requests.hpp>
-class MarketClient
+
+class OptionClient
 {
 public:
-    MarketClient();
+    OptionClient();
     // Basic Functions
     void init();
-
-    //
-    std::string get_stock_bars(const StockBarsRequest &stockbarsrequest);
-    std::string get_stock_latest_bars(const StockLatestBarRequest &stockbarslatestrequest);
     std::string get_option_bars(const OptionBarRequest &optionbarrequest);
     std::string get_option_latest_bars(const OptionLatestBarRequest &optionbarlatestrequest);
     std::string get_options_chains(const OptionChainRequest &optionchainrequest);

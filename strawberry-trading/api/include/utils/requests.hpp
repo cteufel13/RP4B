@@ -69,3 +69,41 @@ public:
     std::vector<std::string> symbols;
     std::string to_fields() const;
 };
+
+class OptionBarRequest
+{
+public:
+    OptionBarRequest(std::vector<std::string> symbols,
+                     TimeFrame tframe,
+                     std::optional<std::string> start = std::nullopt,
+                     std::optional<std::string> end = std::nullopt,
+                     std::optional<int> limit = std::nullopt);
+
+    std::vector<std::string> symbols;
+    TimeFrame tframe;
+    std::optional<std::string>
+        start;
+    std::optional<std::string> end;
+    std::optional<int> limit;
+
+    std::string to_fields() const;
+};
+
+class OptionLatestBarRequest
+{
+public:
+    OptionLatestBarRequest(
+        std::vector<std::string> symbols);
+
+    std::vector<std::string> symbols;
+    std::string to_fields() const;
+};
+
+class OptionChainRequest
+{
+public:
+    OptionChainRequest(std::string underlying_symbol);
+
+    std::string symbol;
+    std::string to_fields() const;
+};

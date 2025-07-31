@@ -27,9 +27,9 @@ std::string MarketClient::get_stock_bars(const StockBarsRequest &stockbarsreques
     std::string payload = stockbarsrequest.to_fields();
     return http_client->GET(extension, payload);
 };
-std::string MarketClient::get_latest_bars(const StockLatestBarRequest &stockbarslatestrequest)
+std::string MarketClient::get_stock_latest_bars(const StockLatestBarRequest &stockbarslatestrequest)
 {
     std::string extension = "/stocks/bars/latest";
     std::string payload = stockbarslatestrequest.to_fields();
     return http_client->GET(extension, payload);
-}
+};

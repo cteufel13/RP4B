@@ -179,3 +179,44 @@ std::string StockLatestBarRequest::to_fields() const
     j["symbols"] = symbols;
     return to_query_string(j.dump());
 }
+
+OptionBarRequest::OptionBarRequest(
+    std::vector<std::string> symbols,
+    TimeFrame tframe,
+    std::optional<std::string> start,
+    std::optional<std::string> end,
+    std::optional<int> limit) : symbols(std::move(symbols)), tframe(std::move(tframe)), start(std::move(start)), end(std::move(end)), limit(std::move(limit)) {};
+
+std::string OptionBarRequest::to_fields() const
+{
+    nlohmann::json j;
+
+    j["symbols"] = symbols;
+    j["timeframe"] = tframe.frame;
+    if (start.has_value())
+        j["start"] = start;
+    if (end.has_value())
+        j["end"] = end;
+    if (limit.has_value())
+        j["limit"] = limit;
+
+    return to_query_string(j.dump());
+};
+
+OptionLatestBarRequest::OptionLatestBarRequest(
+    std::vector<std::string> symbols) : symbols(std::move(symbols)) {};
+
+std::string OptionLatestBarRequest::to_fields() const
+{
+    nlohmann::json j;
+    j["symbols"] = symbols;
+    return to_query_string(j.dump());
+}
+
+OptionChainRequest::OptionChainRequest(std::string underlying_symbol) : symbol(std::move(underlying_symbol)) {};
+std::string OptionChainRequest::to_fields() const
+{
+    std::string output = "feed=indicative&limit=100";
+    return output;
+};
+;
