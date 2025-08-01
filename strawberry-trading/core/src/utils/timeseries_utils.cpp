@@ -1,6 +1,47 @@
 #include <chrono>
+#include <utils/timeseries_utils.hpp>
+#include <sstream>
+#include <iomanip>
 
 std::chrono::system_clock::time_point from_unix_timestamp(int64_t unix_time)
 {
     return std::chrono::system_clock::time_point{std::chrono::seconds{unix_time}};
+}
+
+Date::Date() : date(std::chrono::year{1970} / 1 / 1) {}
+
+Date::Date(int year, int month, int day)
+    : date(std::chrono::year{year} / std::chrono::month{static_cast<unsigned>(month)} / std::chrono::day{static_cast<unsigned>(day)}) {}
+
+std::string Date::to_string() const
+{
+    std::ostringstream oss;
+    oss << int(date.year()) << "-"
+        << std::setw(2) << std::setfill('0') << unsigned(date.month()) << "-"
+        << std::setw(2) << std::setfill('0') << unsigned(date.day());
+    return oss.str();
+}
+
+Date Date::from_string(const std::string &str)
+{
+    int y, m, d;
+    sscanf(str.c_str(), "%d-%d-%d", &y, &m, &d);
+    return Date(y, m, d);
+}
+
+Date Date::now()
+{
+    auto today = std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now());
+    auto ymd = std::chrono::year_month_day{today};
+    return Date(int(ymd.year()), unsigned(ymd.month()), unsigned(ymd.day()));
+}
+
+Date Date::operator+(std::chrono::days delta) const
+{
+    auto sys_days = std::chrono::sys_days{date} + delta;
+    auto ymd = std::chrono::year_month_day{sys_days};
+    return Date(
+        static_cast<int>(ymd.year()),
+        static_cast<unsigned>(ymd.month()),
+        static_cast<unsigned>(ymd.day()));
 }

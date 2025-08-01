@@ -62,7 +62,7 @@ int main()
 
     MarketInterface marketinterface = MarketInterface();
     // std::cout<<marketinterface.order("SPY");
-    marketinterface.getPortfolioHistory();
+    marketinterface.getOptionContract("SPY250806C00500000");
 
     return 0;
 }

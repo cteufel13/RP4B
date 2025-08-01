@@ -59,7 +59,8 @@
         "deque": "cpp",
         "forward_list": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.sourceDirectory": "/Users/carloteufel/Documents/Projects/RP4B/strawberry-trading",
     "C_Cpp.errorSquiggles": "disabled"

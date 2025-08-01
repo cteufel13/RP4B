@@ -8,3 +8,5 @@ Option parseOptionName(const std::string &optionName);
 void parseGreeks(const nlohmann::json &greeksjson, Option &option);
 
 void parseVolume(const nlohmann::json &greeksjson, Option &option);
+
+Option parseOption(const nlohmann::json &optionjson);

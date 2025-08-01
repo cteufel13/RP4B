@@ -127,8 +127,62 @@ TimeSeries MarketInterface::getPortfolioHistory()
     return series;
 };
 
-std::string MarketInterface::getOptionContracts()
+std::optional<std::string> convertToString(const std::optional<Date> &optDate)
 {
-    GetOptionContractsRequest req = GetOptionContractsRequest();
-    std::string response = trading_client.get_option_contracts()
+    if (optDate.has_value())
+    {
+        return optDate->to_string(); // use -> to access Date inside optional
+    }
+    return std::nullopt;
+}
+
+std::vector<Option> MarketInterface::getOptionContracts(std::vector<std::string> underlying_symbols,
+                                                        AssetStatus status,
+                                                        Date expiration_date,
+                                                        std::optional<Date> expiration_date_gte,
+                                                        std::optional<Date> expiration_date_lte,
+                                                        std::optional<std::string> root_symbol,
+                                                        ContractType type,
+                                                        ExerciseStyle style,
+                                                        std::optional<std::string> strike_price_gte,
+                                                        std::optional<std::string> strike_price_lte,
+                                                        std::optional<int> limit)
+{
+    GetOptionContractsRequest req = GetOptionContractsRequest(underlying_symbols,
+                                                              status,
+                                                              convertToString(expiration_date),
+                                                              convertToString(expiration_date_gte),
+                                                              convertToString(expiration_date_lte),
+                                                              root_symbol,
+                                                              type,
+                                                              style,
+                                                              strike_price_gte,
+                                                              strike_price_lte,
+                                                              limit);
+    std::string response = trading_client.get_option_contracts(req);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+
+    if (!response_json.contains("option_contracts"))
+    {
+        logger.error("[MarketInterface::getOptionContracts] Error with Contract Retrieval");
+        return std::vector<Option>{};
+    }
+    response_json = response_json["option_contracts"];
+
+    std::vector<Option> options;
+
+    for (const auto &opt : response_json)
+    {
+        options.push_back(parseOption(opt));
+    };
+    return options;
 };
+
+Option MarketInterface::getOptionContract(const std::string &symbol_asset_id)
+{
+    std::string response = trading_client.get_option_contract(symbol_asset_id);
+    std::cout << response << std::endl;
+    nlohmann::json response_json = nlohmann::json::parse(response);
+
+    return parseOption(response_json);
+}

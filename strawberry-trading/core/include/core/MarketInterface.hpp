@@ -8,6 +8,7 @@
 #include <utils/json.hpp>
 #include <utils/position_utils.hpp>
 #include <utils/timeseries_utils.hpp>
+#include <utils/option_utils.hpp>
 
 #include <string>
 
@@ -29,18 +30,18 @@ public:
     void closeAllPositions();
     void closePosition(const std::string &symbol_or_asset_id);
     TimeSeries getPortfolioHistory();
-    std::string getOptionContracts(std::vector<std::string> underlying_symbols,
-                                   AssetStatus status = AssetStatus::ACTIVE,
-                                   std::optional<std::string> expiration_date,
-                                   std::optional<std::string> expiration_date_gte,
-                                   std::optional<std::string> expiration_date_lte,
-                                   std::optional<std::string> root_symbol,
-                                   ContractType type = ContractType::CALL,
-                                   ExerciseStyle style = ExerciseStyle::AMERICAN,
-                                   std::optional<std::string> strike_price_gte,
-                                   std::optional<std::string> strike_price_lte,
-                                   std::optional<int> limit, );
-    std::string getOptionContract();
+    std::vector<Option> getOptionContracts(std::vector<std::string> underlying_symbols,
+                                           AssetStatus status = AssetStatus::ACTIVE,
+                                           Date expiration_date = (Date::now() + std::chrono::days{5}),
+                                           std::optional<Date> expiration_date_gte = std::nullopt,
+                                           std::optional<Date> expiration_date_lte = std::nullopt,
+                                           std::optional<std::string> root_symbol = std::nullopt,
+                                           ContractType type = ContractType::CALL,
+                                           ExerciseStyle style = ExerciseStyle::AMERICAN,
+                                           std::optional<std::string> strike_price_gte = std::nullopt,
+                                           std::optional<std::string> strike_price_lte = std::nullopt,
+                                           std::optional<int> limit = std::nullopt);
+    Option getOptionContract(const std::string &symbol_asset_id);
 
     // Market Data:
     std::string requestStockBars();       // handles Interaction with StockBarsRequest Class
