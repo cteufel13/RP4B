@@ -346,3 +346,24 @@ OptionChain MarketInterface::requestOptionChains(std::string underlying_symbol)
     std::cout << response;
     return output;
 };
+
+std::vector<float> MarketInterface::getDeltas(const OptionChain &optchain)
+{
+    return optchain.get_deltas();
+};
+std::vector<float> MarketInterface::getGammas(const OptionChain &optchain)
+{
+    return optchain.get_gammas();
+};
+std::vector<float> MarketInterface::getVegas(const OptionChain &optchain)
+{
+    return optchain.get_vegas();
+};
+std::vector<float> MarketInterface::getRhos(const OptionChain &optchain)
+{
+    return optchain.get_rhos();
+};
+std::vector<float> MarketInterface::getThetas(const OptionChain &optchain)
+{
+    return optchain.get_thetas();
+};

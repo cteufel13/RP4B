@@ -59,12 +59,12 @@ public:
     OptionChain requestOptionChains(std::string underlying_symbol);
 
     // Other Data:
-    void getGreeks(const OptionChain &optchain);
-    void getDeltas(const OptionChain &optchain);
-    void getGammas(const OptionChain &optchain);
-    void getVegas(const OptionChain &optchain);
-    void getRhos(const OptionChain &optchain);
-    void getRhetas(const OptionChain &optchain);
+    std::vector<float> getGreeks(const OptionChain &optchain);
+    std::vector<float> getDeltas(const OptionChain &optchain);
+    std::vector<float> getGammas(const OptionChain &optchain);
+    std::vector<float> getVegas(const OptionChain &optchain);
+    std::vector<float> getRhos(const OptionChain &optchain);
+    std::vector<float> getThetas(const OptionChain &optchain);
 
 private:
     TradingClient trading_client;
