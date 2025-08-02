@@ -186,3 +186,163 @@ Option MarketInterface::getOptionContract(const std::string &symbol_asset_id)
 
     return parseOption(response_json);
 }
+
+std::vector<TimeSeries> MarketInterface::requestStockBars(std::vector<std::string> symbols,
+                                                          TimeFrame tframe,
+                                                          Date start,
+                                                          std::optional<Date> end,
+                                                          int limit)
+{
+
+    StockBarsRequest req = StockBarsRequest(symbols, tframe, start.to_string(), convertToString(end), limit);
+    std::string response = market_client.get_stock_bars(req);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (!response_json.contains("bars"))
+    {
+        logger.error("[MarketInterface::requestStockBars] Error with Bars Retrieval");
+        return std::vector<TimeSeries>{};
+    }
+    else
+    {
+        response_json = response_json["bars"];
+        std::vector<TimeSeries> output;
+
+        for (const auto &stock : response_json)
+        {
+            TimeSeries ts;
+
+            for (const auto &timepoint : stock)
+            {
+                TimeSeriesPoint entry;
+                entry.timestamp = from_tz_string(timepoint["t"]);
+                entry.values["open"] = timepoint["o"];
+                entry.values["high"] = timepoint["h"];
+                entry.values["low"] = timepoint["l"];
+                entry.values["close"] = timepoint["c"];
+                entry.values["volume"] = timepoint["v"];
+                entry.values["vwap"] = timepoint["vw"];
+
+                ts.addPoint(entry);
+            };
+
+            output.push_back(ts);
+        };
+
+        return output;
+    }
+};
+std::vector<TimeSeriesPoint> MarketInterface::requestStockBarsLatest(const std::vector<std::string> &symbols)
+{
+    StockLatestBarRequest req = StockLatestBarRequest(symbols);
+    std::string response = market_client.get_stock_latest_bars(req);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (!response_json.contains("bars"))
+    {
+        logger.error("[MarketInterface::requestStockBarsLatest] Error with Bars Retrieval");
+        return std::vector<TimeSeriesPoint>{};
+    };
+    response_json = response_json["bars"];
+
+    std::vector<TimeSeriesPoint> output;
+
+    for (const auto &stock : response_json)
+    {
+        TimeSeriesPoint entry;
+        entry.timestamp = from_tz_string(stock["t"]);
+        entry.values["open"] = stock["o"];
+        entry.values["high"] = stock["h"];
+        entry.values["low"] = stock["l"];
+        entry.values["close"] = stock["c"];
+        entry.values["volume"] = stock["v"];
+        entry.values["vwap"] = stock["vw"];
+        output.push_back(entry);
+    };
+    return output;
+};
+
+std::vector<TimeSeries> MarketInterface::requestOptionBars(std::vector<std::string> symbols,
+                                                           TimeFrame tframe,
+                                                           std::optional<std::string> start,
+                                                           std::optional<std::string> end,
+                                                           std::optional<int> limit)
+{
+    OptionBarRequest req = OptionBarRequest(symbols,
+                                            tframe,
+                                            start,
+                                            end,
+                                            limit);
+
+    std::string response = option_client.get_option_bars(req);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (!response_json.contains("bars"))
+    {
+        logger.error("[MarketInterface::requestOptionBars] Error with Bars Retrieval");
+        return std::vector<TimeSeries>{};
+    }
+    else
+    {
+        response_json = response_json["bars"];
+        std::vector<TimeSeries> output;
+
+        for (const auto &option : response_json)
+        {
+            TimeSeries ts;
+
+            for (const auto &timepoint : option)
+            {
+                TimeSeriesPoint entry;
+                entry.timestamp = from_tz_string(timepoint["t"]);
+                entry.values["open"] = timepoint["o"];
+                entry.values["high"] = timepoint["h"];
+                entry.values["low"] = timepoint["l"];
+                entry.values["close"] = timepoint["c"];
+                entry.values["volume"] = timepoint["v"];
+                entry.values["vwap"] = timepoint["vw"];
+                entry.values["n"] = timepoint["n"];
+
+                ts.addPoint(entry);
+            };
+
+            output.push_back(ts);
+        };
+
+        return output;
+    };
+};
+std::vector<TimeSeriesPoint> MarketInterface::requestOptionBarsLatest(const std::vector<std::string> &options)
+{
+    OptionLatestBarRequest req = OptionLatestBarRequest(options);
+    std::string response = option_client.get_option_latest_bars(req);
+    nlohmann::json response_json = nlohmann::json::parse(response);
+    if (!response_json.contains("bars"))
+    {
+        logger.error("[MarketInterface::requestOptionBarsLatest] Error with Bars Retrieval");
+        return std::vector<TimeSeriesPoint>{};
+    };
+    response_json = response_json["bars"];
+
+    std::vector<TimeSeriesPoint> output;
+
+    for (const auto &option : response_json)
+    {
+        TimeSeriesPoint entry;
+        entry.timestamp = from_tz_string(option["t"]);
+        entry.values["open"] = option["o"];
+        entry.values["high"] = option["h"];
+        entry.values["low"] = option["l"];
+        entry.values["close"] = option["c"];
+        entry.values["volume"] = option["v"];
+        entry.values["vwap"] = option["vw"];
+        output.push_back(entry);
+    };
+    return output;
+};
+
+OptionChain MarketInterface::requestOptionChains(std::string underlying_symbol)
+{
+    OptionChainRequest req = OptionChainRequest(underlying_symbol);
+    std::string response = option_client.get_options_chains(req);
+    OptionChain output = OptionChain(response);
+    std::cout << response;
+    return output;
+};

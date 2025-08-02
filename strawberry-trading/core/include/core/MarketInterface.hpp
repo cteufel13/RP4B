@@ -44,11 +44,19 @@ public:
     Option getOptionContract(const std::string &symbol_asset_id);
 
     // Market Data:
-    std::string requestStockBars();       // handles Interaction with StockBarsRequest Class
-    std::string requestStockBarsLatest(); // handles Interaction with StockbarsLatest Class
-    std::string requestOptionBars();
-    std::string requestOptionBarsLatest();
-    OptionChain requestOptionChains();
+    std::vector<TimeSeries> requestStockBars(std::vector<std::string> symbols,
+                                             TimeFrame tframe = TimeFrame(15, TimeFrameUnit::Minute),
+                                             Date start = Date::now() - std::chrono::days{1},
+                                             std::optional<Date> end = std::nullopt,
+                                             int limit = 100); // handles Interaction with StockBarsRequest Class
+    std::vector<TimeSeriesPoint> requestStockBarsLatest(const std::vector<std::string> &symbols);
+    std::vector<TimeSeries> requestOptionBars(std::vector<std::string> symbols,
+                                              TimeFrame tframe,
+                                              std::optional<std::string> start = std::nullopt,
+                                              std::optional<std::string> end = std::nullopt,
+                                              std::optional<int> limit = std::nullopt);
+    std::vector<TimeSeriesPoint> requestOptionBarsLatest(const std::vector<std::string> &options);
+    OptionChain requestOptionChains(std::string underlying_symbol);
 
     // Other Data:
     void getGreeks(const OptionChain &optchain);

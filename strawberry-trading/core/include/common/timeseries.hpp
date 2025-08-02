@@ -1,5 +1,6 @@
 #include <chrono>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 struct TimeSeriesPoint
 {

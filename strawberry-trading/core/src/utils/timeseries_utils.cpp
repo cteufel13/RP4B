@@ -2,11 +2,21 @@
 #include <utils/timeseries_utils.hpp>
 #include <sstream>
 #include <iomanip>
+#include "date/date.h"
 
 std::chrono::system_clock::time_point from_unix_timestamp(int64_t unix_time)
 {
     return std::chrono::system_clock::time_point{std::chrono::seconds{unix_time}};
 }
+std::chrono::system_clock::time_point from_tz_string(std::string tz_string)
+{
+    std::tm tm = {};
+    std::istringstream ss(tz_string);
+    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%SZ"); // assumes UTC 'Z'
+
+    std::time_t time = timegm(&tm); // UTC-safe version of mktime (non-standard but works on Unix)
+    return std::chrono::system_clock::from_time_t(time);
+};
 
 Date::Date() : date(std::chrono::year{1970} / 1 / 1) {}
 
@@ -39,6 +49,16 @@ Date Date::now()
 Date Date::operator+(std::chrono::days delta) const
 {
     auto sys_days = std::chrono::sys_days{date} + delta;
+    auto ymd = std::chrono::year_month_day{sys_days};
+    return Date(
+        static_cast<int>(ymd.year()),
+        static_cast<unsigned>(ymd.month()),
+        static_cast<unsigned>(ymd.day()));
+}
+
+Date Date::operator-(std::chrono::days delta) const
+{
+    auto sys_days = std::chrono::sys_days{date} - delta;
     auto ymd = std::chrono::year_month_day{sys_days};
     return Date(
         static_cast<int>(ymd.year()),

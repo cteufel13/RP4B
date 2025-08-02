@@ -58,11 +58,8 @@ int main()
     // OptionChain chain = OptionChain(options_chain);
     // auto greeks = chain.get_greeks_matrix();
 
-    // savejson(options_chain, "OptionsChains.txt");
-
     MarketInterface marketinterface = MarketInterface();
-    // std::cout<<marketinterface.order("SPY");
-    marketinterface.getOptionContract("SPY250806C00500000");
+    marketinterface.requestOptionChains("SPY");
 
     return 0;
 }
