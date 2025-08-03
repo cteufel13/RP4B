@@ -60,5 +60,6 @@ std::string type2string(OrderType type);
 std::string tif2string(TimeInForce tif);
 std::string class2string(OrderClass orderclass);
 std::string side2string(OrderSide side);
+std::string contract2string(ContractType type);
 
 #endif // ORDERTYPES_H

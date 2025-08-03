@@ -10,12 +10,21 @@ Logger &Logger::getInstance()
 };
 void Logger::set_log_file(const std::string &file_path)
 {
-    std::string full_path = std::filesystem::current_path().string() + file_path;
+    std::filesystem::path full_path = std::filesystem::current_path() / file_path;
     std::lock_guard<std::mutex> lock(log_mutx);
+
     if (file.is_open())
-        file.close();
+    {
+        file.close(); // Close any previously open file
+    }
+
     file.open(full_path, std::ios::app);
-};
+
+    if (!file.is_open())
+    {
+        std::cerr << "[Logger] Failed to open log file: " << full_path << std::endl;
+    }
+}
 
 Logger::~Logger()
 {

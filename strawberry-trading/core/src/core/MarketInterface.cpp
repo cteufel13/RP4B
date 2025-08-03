@@ -210,7 +210,6 @@ Option MarketInterface::getOptionContract(const std::string &symbol_asset_id)
     std::string response = trading_client.get_option_contract(symbol_asset_id);
     logger.debug("[MarketInterface::getOptionContract] Received response, parsing JSON");
 
-    std::cout << response << std::endl;
     nlohmann::json response_json = nlohmann::json::parse(response);
 
     Option option = parseOption(response_json);
@@ -391,17 +390,41 @@ std::vector<TimeSeriesPoint> MarketInterface::requestOptionBarsLatest(const std:
     return output;
 };
 
-OptionChain MarketInterface::requestOptionChains(std::string underlying_symbol)
+OptionChain MarketInterface::requestOptionChains(
+    std::string underlying_symbol,
+    std::optional<ContractType> type,
+    std::optional<double> strike_price_gte,
+    std::optional<double> strike_price_lte,
+    std::optional<std::string> expiration_date,
+    std::optional<std::string> expiration_date_gte,
+    std::optional<std::string> expiration_date_lte,
+    std::optional<std::string> root_symbol,
+    std::optional<std::chrono::system_clock::time_point> updated_since,
+    std::string feed,
+    int limit)
 {
     logger.debug("[MarketInterface::requestOptionChains] Requesting option chain for: " + underlying_symbol);
-    OptionChainRequest req = OptionChainRequest(underlying_symbol);
+
+    OptionChainRequest req(
+        std::move(underlying_symbol),
+        std::move(feed),
+        limit,
+        type,
+        strike_price_gte,
+        strike_price_lte,
+        std::move(expiration_date),
+        std::move(expiration_date_gte),
+        std::move(expiration_date_lte),
+        std::move(root_symbol),
+        updated_since);
+
     std::string response = option_client.get_options_chains(req);
     logger.debug("[MarketInterface::requestOptionChains] Received response, creating OptionChain object");
-    // std::cout << response;
-    OptionChain output = OptionChain(response);
-    logger.info("[MarketInterface::requestOptionChains] Successfully retrieved option chain for " + underlying_symbol);
+    OptionChain output(response);
+    logger.info("[MarketInterface::requestOptionChains] Successfully retrieved option chain");
+
     return output;
-};
+}
 
 std::vector<float> MarketInterface::getDeltas(OptionChain &optchain)
 {

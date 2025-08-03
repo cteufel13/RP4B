@@ -39,7 +39,6 @@ std::string OptionClient::get_options_chains(const OptionChainRequest &optioncha
     std::string extension = "/options/snapshots/" + optionchainrequest.symbol;
     std::string payload = optionchainrequest.to_fields();
     std::string response = http_client->GET(extension, payload);
-
     nlohmann::json j = nlohmann::json::parse(response);
     nlohmann::json final_result;
     final_result["snapshots"] = nlohmann::json::object(); // initialize as dict

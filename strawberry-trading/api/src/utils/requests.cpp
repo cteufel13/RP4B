@@ -213,10 +213,56 @@ std::string OptionLatestBarRequest::to_fields() const
     return to_query_string(j.dump());
 }
 
-OptionChainRequest::OptionChainRequest(std::string underlying_symbol) : symbol(std::move(underlying_symbol)) {};
+OptionChainRequest::OptionChainRequest(
+    std::string underlying_symbol,
+    std::string feed,
+    int limit,
+    std::optional<ContractType> type,
+    std::optional<double> strike_price_gte,
+    std::optional<double> strike_price_lte,
+    std::optional<std::string> expiration_date,
+    std::optional<std::string> expiration_date_gte,
+    std::optional<std::string> expiration_date_lte,
+    std::optional<std::string> root_symbol,
+    std::optional<std::chrono::system_clock::time_point> updated_since)
+    : symbol(std::move(underlying_symbol)),
+      feed(std::move(feed)),
+      limit(std::move(limit)),
+      type(std::move(type)),
+      strike_price_gte(strike_price_gte),
+      strike_price_lte(strike_price_lte),
+      expiration_date(std::move(expiration_date)),
+      expiration_date_gte(std::move(expiration_date_gte)),
+      expiration_date_lte(std::move(expiration_date_lte)),
+      root_symbol(std::move(root_symbol)),
+      updated_since(updated_since)
+{
+}
+
 std::string OptionChainRequest::to_fields() const
 {
-    std::string output = "feed=indicative&limit=1000";
+    nlohmann::json j;
+
+    j["feed"] = feed;
+    j["limit"] = limit;
+
+    if (type.has_value())
+        j["type"] = contract2string(type.value());
+
+    if (strike_price_gte.has_value())
+        j["strike_price_gte"] = strike_price_gte.value();
+    if (strike_price_lte.has_value())
+        j["strike_price_lte"] = strike_price_lte.value();
+    if (expiration_date.has_value())
+        j["expiration_date"] = expiration_date.value();
+    if (expiration_date_gte.has_value())
+        j["expiration_date_gte"] = expiration_date_gte.value();
+    if (expiration_date_lte.has_value())
+        j["expiration_date_lte"] = expiration_date_lte.value();
+    if (root_symbol.has_value())
+        j["root_symbol"] = root_symbol.value();
+
+    std::string output = to_query_string(j.dump());
     return output;
 };
 ;

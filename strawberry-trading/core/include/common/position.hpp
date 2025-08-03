@@ -1,8 +1,25 @@
 #pragma once
 #include <string>
 
+enum class ActionType
+{
+    BUY,
+    SELL,
+    HOLD
+};
+
 struct Position
 {
+
+    Position();
+
+    Position(const std::string &sym,
+             const std::string &assetCls,
+             bool marginable,
+             float quantity,
+             float entry_price,
+             const std::string &position_side);
+
     std::string symbol;
     std::string asset_class;
     bool asset_marginable;
@@ -19,4 +36,6 @@ struct Position
     float lastday_price;
     float change_today;
     int qty_available;
+
+    void update(ActionType action, float qty_change, float price);
 };

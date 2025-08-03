@@ -102,8 +102,28 @@ public:
 class OptionChainRequest
 {
 public:
-    OptionChainRequest(std::string underlying_symbol);
+    OptionChainRequest(std::string underlying_symbol,
+                       std::string feed = "indicative",
+                       int limit = 1000,
+                       std::optional<ContractType> type = std::nullopt,
+                       std::optional<double> strike_price_gte = std::nullopt,
+                       std::optional<double> strike_price_lte = std::nullopt,
+                       std::optional<std::string> expiration_date = std::nullopt,
+                       std::optional<std::string> expiration_date_gte = std::nullopt,
+                       std::optional<std::string> expiration_date_lte = std::nullopt,
+                       std::optional<std::string> root_symbol = std::nullopt,
+                       std::optional<std::chrono::system_clock::time_point> updated_since = std::nullopt);
 
     std::string symbol;
+    std::string feed;
+    int limit;
+    std::optional<ContractType> type = std::nullopt;
+    std::optional<double> strike_price_gte = std::nullopt;
+    std::optional<double> strike_price_lte = std::nullopt;
+    std::optional<std::string> expiration_date = std::nullopt; // Storing as string for flexibility
+    std::optional<std::string> expiration_date_gte = std::nullopt;
+    std::optional<std::string> expiration_date_lte = std::nullopt;
+    std::optional<std::string> root_symbol = std::nullopt;
+    std::optional<std::chrono::system_clock::time_point> updated_since = std::nullopt;
     std::string to_fields() const;
 };

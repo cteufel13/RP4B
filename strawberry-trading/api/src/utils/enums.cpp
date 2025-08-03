@@ -65,4 +65,15 @@ std::string side2string(OrderSide side)
     case OrderSide::SELL:
         return "sell";
     }
-}
+};
+
+std::string contract2string(ContractType type)
+{
+    switch (type)
+    {
+    case ContractType::CALL:
+        return "call";
+    case ContractType::PUT:
+        return "put";
+    }
+};

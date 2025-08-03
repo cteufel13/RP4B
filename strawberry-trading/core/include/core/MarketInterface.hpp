@@ -57,7 +57,18 @@ public:
                                               std::optional<std::string> end = std::nullopt,
                                               std::optional<int> limit = std::nullopt);
     std::vector<TimeSeriesPoint> requestOptionBarsLatest(const std::vector<std::string> &options);
-    OptionChain requestOptionChains(std::string underlying_symbol);
+    OptionChain requestOptionChains(
+        std::string underlying_symbol,
+        std::optional<ContractType> type = std::nullopt,
+        std::optional<double> strike_price_gte = std::nullopt,
+        std::optional<double> strike_price_lte = std::nullopt,
+        std::optional<std::string> expiration_date = std::nullopt,
+        std::optional<std::string> expiration_date_gte = std::nullopt,
+        std::optional<std::string> expiration_date_lte = std::nullopt,
+        std::optional<std::string> root_symbol = std::nullopt,
+        std::optional<std::chrono::system_clock::time_point> updated_since = std::nullopt,
+        std::string feed = "indicative",
+        int limit = 1000);
 
     // Other Data:
     std::vector<float> getGreeks(OptionChain &optchain);

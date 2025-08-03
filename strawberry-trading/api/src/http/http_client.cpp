@@ -76,7 +76,7 @@ std::string HTTPClient::GET(const std::string &end_point, const std::optional<st
 
 std::string HTTPClient::POST(const std::string &end_point, const std::string &body)
 {
-    return makeRequest("POST", end_point, body);
+    return makeRequest("POST", end_point, body, std::nullopt);
 };
 
 std::string HTTPClient::DELETE(const std::string &end_point)

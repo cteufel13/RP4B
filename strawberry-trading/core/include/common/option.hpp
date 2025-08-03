@@ -5,6 +5,7 @@
 
 struct Option
 {
+    std::string name;
     std::string ticker;
     Date date;
     char type;

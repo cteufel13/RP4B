@@ -7,6 +7,7 @@
 Option parseOptionName(const std::string &optionName)
 {
     Option data;
+    data.name = optionName;
     data.ticker = optionName.substr(0, optionName.size() - 15);
     data.date = Date::from_string("20" + optionName.substr(optionName.size() - 15, 6)); // YYMMDD → 20YYMMDD
     data.type = optionName[optionName.size() - 9];
@@ -27,6 +28,7 @@ void parseGreeks(const nlohmann::json &greeksjson, Option &option)
 void parseVolume(const nlohmann::json &greeksjson, Option &option)
 {
     option.volume = greeksjson["v"];
+    option.premium = greeksjson["c"];
 };
 
 Option parseOption(const nlohmann::json &optionjson)
