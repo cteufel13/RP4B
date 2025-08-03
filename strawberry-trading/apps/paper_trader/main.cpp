@@ -1,26 +1,34 @@
-#include <api/trading_client.hpp>
-#include <api/market_data_client.hpp>
-#include <api/option_data_client.hpp>
-#include <string>
-#include <vector>
 #include <iostream>
 #include <scheduler/scheduler.hpp>
 #include <logger_alias.hpp>
-#include <utils/json.hpp>
 #include <thread>
-#include <common/optionchain.hpp>
 #include <core/MarketInterface.hpp>
 #include <strategies/deltahedge.hpp>
 
 int main()
 {
+
     Scheduler scheduler;
     MarketInterface marketinterface;
-    logger.set_log_file("Run.log");
+
+    logger.set_log_file("logs/run.log");
 
     DeltaHedge strat = DeltaHedge(marketinterface, std::chrono::seconds(100));
     strat.setSymbol("SPY");
-    strat.run();
+
+    scheduler.addTask([&strat]()
+                      { strat.run(); }, strat.getInterval());
+
+    std::thread sched_thread([&scheduler]()
+                             { scheduler.run(); });
+
+    std::cin.get(); // Main thread waits for Enter
+
+    std::cout << "[Main] Stopping scheduler...\n";
+    scheduler.stop();
+
+    sched_thread.join();
+    std::cout << "[Main] Done.\n";
 
     return 0;
 }

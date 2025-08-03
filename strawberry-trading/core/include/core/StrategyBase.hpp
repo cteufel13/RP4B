@@ -10,6 +10,7 @@ public:
     virtual ~TradingStrategy() = default;
 
     virtual void run() = 0;
+    std::chrono::seconds getInterval();
 
 protected:
     MarketInterface &market_;

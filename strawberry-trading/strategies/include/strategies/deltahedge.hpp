@@ -12,9 +12,8 @@ public:
     void init();
     void run() override;
     void setHedgedOoption(OptionChain &optchain, float price);
-
+    using TradingStrategy::getInterval;
     void setSymbol(std::string symbol);
-    std::chrono::seconds interval;
 
 private:
     float prev_delta;

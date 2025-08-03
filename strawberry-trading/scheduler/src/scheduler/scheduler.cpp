@@ -24,6 +24,7 @@ void update_tasks(std::vector<Task> &tasks, const std::chrono::time_point<std::c
         {
             std::cout << "Time:" << now;
             task.func();
+            std::cout << std::endl;
             task.nextRun = now + task.interval;
         };
     };

@@ -12,7 +12,6 @@ void DeltaHedge::run()
     {
         OptionChain current_option_chain = market_.requestOptionChains(symbol, typeconv(hedgedoption.value().type), hedgedoption.value().strike, hedgedoption.value().strike, hedgedoption.value().date.to_string());
         std::vector<TimeSeriesPoint> current_prices = market_.requestStockBarsLatest(std::vector<std::string>{symbol});
-
         Option current_option = current_option_chain.find_Option(symbol, hedgedoption.value().date, hedgedoption.value().type, hedgedoption.value().strike);
 
         float current_stock_price = current_prices.at(0).values["close"];
