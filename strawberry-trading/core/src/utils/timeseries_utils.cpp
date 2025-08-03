@@ -34,9 +34,19 @@ std::string Date::to_string() const
 
 Date Date::from_string(const std::string &str)
 {
-    int y, m, d;
-    sscanf(str.c_str(), "%d-%d-%d", &y, &m, &d);
-    return Date(y, m, d);
+    if (str.find('-') != std::string::npos)
+    {
+        int y, m, d;
+        sscanf(str.c_str(), "%d-%d-%d", &y, &m, &d);
+        return Date(y, m, d);
+    }
+    else
+    {
+        int y = std::stoi(str.substr(0, 4));
+        int m = std::stoi(str.substr(4, 2));
+        int d = std::stoi(str.substr(6, 2));
+        return Date(y, m, d);
+    }
 }
 
 Date Date::now()
@@ -45,6 +55,11 @@ Date Date::now()
     auto ymd = std::chrono::year_month_day{today};
     return Date(int(ymd.year()), unsigned(ymd.month()), unsigned(ymd.day()));
 }
+
+Date Date::max()
+{
+    return Date(9999, 12, 31);
+};
 
 Date Date::operator+(std::chrono::days delta) const
 {
@@ -64,4 +79,35 @@ Date Date::operator-(std::chrono::days delta) const
         static_cast<int>(ymd.year()),
         static_cast<unsigned>(ymd.month()),
         static_cast<unsigned>(ymd.day()));
+}
+
+bool Date::operator==(const Date &other) const
+{
+    return date == other.date;
+}
+
+bool operator<(const Date &lhs, const Date &rhs)
+{
+    return lhs.date < rhs.date;
+}
+
+bool operator>(const Date &lhs, const Date &rhs)
+{
+    return lhs.date > rhs.date;
+}
+
+bool operator<=(const Date &lhs, const Date &rhs)
+{
+    return !(lhs > rhs);
+}
+
+bool operator>=(const Date &lhs, const Date &rhs)
+{
+    return !(lhs < rhs);
+}
+
+std::ostream &operator<<(std::ostream &os, const Date &obj)
+{
+    os << "Date(" << obj.date << ")";
+    return os;
 }

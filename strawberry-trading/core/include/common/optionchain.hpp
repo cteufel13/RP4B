@@ -13,6 +13,12 @@ public:
     std::vector<float> get_vegas();
     std::vector<float> get_rhos();
     std::vector<float> get_thetas();
+    Option find_Option(const std::string &ticker,
+                       const Date &date,
+                       const char &type,
+                       const double &strike);
+
+    friend std::ostream &operator<<(std::ostream &os, const OptionChain &obj);
 
 private:
     void process(const std::string &optionchainjstring);

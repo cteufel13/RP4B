@@ -216,7 +216,7 @@ std::string OptionLatestBarRequest::to_fields() const
 OptionChainRequest::OptionChainRequest(std::string underlying_symbol) : symbol(std::move(underlying_symbol)) {};
 std::string OptionChainRequest::to_fields() const
 {
-    std::string output = "feed=indicative&limit=100";
+    std::string output = "feed=indicative&limit=1000";
     return output;
 };
 ;

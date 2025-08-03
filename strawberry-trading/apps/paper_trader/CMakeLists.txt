@@ -6,4 +6,5 @@ target_link_libraries(paper_trader
         scheduler
         logging
         core
+        strategies
 )

@@ -4,7 +4,8 @@
 #include <string>
 #include <iostream>
 
-MarketInterface::MarketInterface() : trading_client(), option_client(), market_client() {
+MarketInterface::MarketInterface() : trading_client(), option_client(), market_client()
+{
     logger.info("[MarketInterface] Constructor - Initialized trading, option, and market clients");
 };
 
@@ -31,7 +32,7 @@ bool MarketInterface::order(std::string symbol,
     logger.debug("[MarketInterface::order] Order object created, submitting to trading client");
     std::string response = trading_client.submit_order(order);
     logger.debug("[MarketInterface::order] Received response from trading client");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
 
     if (response_json["filled_at"].is_null())
@@ -51,7 +52,7 @@ std::vector<Position> MarketInterface::getAllPositions()
     logger.debug("[MarketInterface::getAllPositions] Requesting all positions from trading client");
     std::string response = trading_client.get_all_positions();
     logger.debug("[MarketInterface::getAllPositions] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (response_json.size() == 0)
     {
@@ -76,7 +77,7 @@ Position MarketInterface::getOpenPosition(const std::string &symbol_or_asset_id)
     logger.debug("[MarketInterface::getOpenPosition] Requesting position for: " + symbol_or_asset_id);
     std::string response = trading_client.get_open_position(symbol_or_asset_id);
     logger.debug("[MarketInterface::getOpenPosition] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (response_json.contains("code"))
     {
@@ -118,7 +119,7 @@ TimeSeries MarketInterface::getPortfolioHistory()
     logger.debug("[MarketInterface::getPortfolioHistory] Requesting portfolio history");
     std::string response = trading_client.get_portfolio_history();
     logger.debug("[MarketInterface::getPortfolioHistory] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (response_json.contains("code"))
     {
@@ -182,7 +183,7 @@ std::vector<Option> MarketInterface::getOptionContracts(std::vector<std::string>
                                                               limit);
     std::string response = trading_client.get_option_contracts(req);
     logger.debug("[MarketInterface::getOptionContracts] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
 
     if (!response_json.contains("option_contracts"))
@@ -208,7 +209,7 @@ Option MarketInterface::getOptionContract(const std::string &symbol_asset_id)
     logger.debug("[MarketInterface::getOptionContract] Requesting option contract for: " + symbol_asset_id);
     std::string response = trading_client.get_option_contract(symbol_asset_id);
     logger.debug("[MarketInterface::getOptionContract] Received response, parsing JSON");
-    
+
     std::cout << response << std::endl;
     nlohmann::json response_json = nlohmann::json::parse(response);
 
@@ -228,7 +229,7 @@ std::vector<TimeSeries> MarketInterface::requestStockBars(std::vector<std::strin
     StockBarsRequest req = StockBarsRequest(symbols, tframe, start.to_string(), convertToString(end), limit);
     std::string response = market_client.get_stock_bars(req);
     logger.debug("[MarketInterface::requestStockBars] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (!response_json.contains("bars"))
     {
@@ -273,7 +274,7 @@ std::vector<TimeSeriesPoint> MarketInterface::requestStockBarsLatest(const std::
     StockLatestBarRequest req = StockLatestBarRequest(symbols);
     std::string response = market_client.get_stock_latest_bars(req);
     logger.debug("[MarketInterface::requestStockBarsLatest] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (!response_json.contains("bars"))
     {
@@ -316,7 +317,7 @@ std::vector<TimeSeries> MarketInterface::requestOptionBars(std::vector<std::stri
 
     std::string response = option_client.get_option_bars(req);
     logger.debug("[MarketInterface::requestOptionBars] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (!response_json.contains("bars"))
     {
@@ -362,7 +363,7 @@ std::vector<TimeSeriesPoint> MarketInterface::requestOptionBarsLatest(const std:
     OptionLatestBarRequest req = OptionLatestBarRequest(options);
     std::string response = option_client.get_option_latest_bars(req);
     logger.debug("[MarketInterface::requestOptionBarsLatest] Received response, parsing JSON");
-    
+
     nlohmann::json response_json = nlohmann::json::parse(response);
     if (!response_json.contains("bars"))
     {
@@ -396,9 +397,8 @@ OptionChain MarketInterface::requestOptionChains(std::string underlying_symbol)
     OptionChainRequest req = OptionChainRequest(underlying_symbol);
     std::string response = option_client.get_options_chains(req);
     logger.debug("[MarketInterface::requestOptionChains] Received response, creating OptionChain object");
-    
+    // std::cout << response;
     OptionChain output = OptionChain(response);
-    std::cout << response;
     logger.info("[MarketInterface::requestOptionChains] Successfully retrieved option chain for " + underlying_symbol);
     return output;
 };

@@ -1,3 +1,4 @@
+#pragma once
 #include <api/market_data_client.hpp>
 #include <api/option_data_client.hpp>
 #include <api/trading_client.hpp>

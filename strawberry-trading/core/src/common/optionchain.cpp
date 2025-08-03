@@ -18,6 +18,7 @@ bool option_has_greeks(nlohmann::json optionjson)
 
 void OptionChain::process(const std::string &optionchainjstring)
 {
+
     nlohmann::json j = nlohmann::json::parse(optionchainjstring);
 
     if (!j.contains("snapshots"))
@@ -33,7 +34,7 @@ void OptionChain::process(const std::string &optionchainjstring)
         // Filter Option if has greeks or not
         for (auto it = j.begin(); it != j.end();)
         {
-            if (!option_has_greeks(it.value()))
+            if ((!option_has_greeks(it.value())) || !it.value().contains("dailyBar"))
             {
                 it = j.erase(it);
             }
@@ -49,6 +50,7 @@ void OptionChain::process(const std::string &optionchainjstring)
             parseGreeks(value["greeks"], option);
             option.impliedVol = value["impliedVolatility"];
             parseVolume(value["dailyBar"], option);
+            options.push_back(option);
         };
     };
 };
@@ -114,3 +116,50 @@ std::vector<float> OptionChain::get_thetas()
     }
     return thetas;
 };
+
+Option OptionChain::find_Option(const std::string &ticker,
+                                const Date &date,
+                                const char &type,
+                                const double &strike)
+{
+
+    Option bestMatch;
+    Date minDate = Date::max(); // assume Date::max() gives the latest possible date
+    double minStrikeDiff = std::numeric_limits<double>::max();
+
+    for (const auto &option : options)
+    {
+        if (option.ticker != ticker || option.type != type)
+            continue;
+
+        if (option.date >= date)
+        {
+            if (option.date < minDate)
+            {
+                minDate = option.date;
+                minStrikeDiff = std::abs(option.strike - strike);
+                bestMatch = option;
+            }
+            else if (option.date == minDate)
+            {
+                double strikeDiff = std::abs(option.strike - strike);
+                if (strikeDiff < minStrikeDiff)
+                {
+                    minStrikeDiff = strikeDiff;
+                    bestMatch = option;
+                }
+            }
+        }
+    }
+
+    return bestMatch;
+};
+
+std::ostream &operator<<(std::ostream &os, const OptionChain &obj)
+{
+    for (const auto &opt : obj.options)
+    {
+        os << "Ticker:" << opt.ticker << " Date:" << opt.date << " Type:" << opt.type << " Strike:" << opt.strike << " Delta:" << opt.delta.value() << " Gamma:" << opt.gamma.value() << " Vega:" << opt.vega.value() << std::endl;
+    }
+    return os;
+}
