@@ -34,15 +34,14 @@ bool MarketInterface::order(std::string symbol,
     logger.debug("[MarketInterface::order] Received response from trading client");
 
     nlohmann::json response_json = nlohmann::json::parse(response);
-
-    if (response_json["filled_at"].is_null())
+    if (!response_json.contains("filled_at"))
     {
         logger.warning("[MarketInterface::order] Order was not filled. May be after hours.");
         return false;
     }
     else
     {
-        logger.info("[MarketInterface::order] Order was filled successfully at " + response_json["filled_at"].get<std::string>() + ".");
+        logger.info("[MarketInterface::order] Order was filled successfully.");
         return true;
     };
 };
