@@ -4,6 +4,12 @@
 
 void DeltaHedge::run()
 {
+    if (!is_valid_time())
+    {
+        logger.info("[DeltaHedge::run] Time is not within trading hours");
+        return;
+    }
+
     if (!initialized)
     {
         init();
@@ -36,7 +42,7 @@ void DeltaHedge::run()
             positions.at(0).update(ActionType::HOLD, 0, current_stock_price);
         };
         positions.at(1).update(ActionType::HOLD, 0, current_option.premium.value());
-    }
+    };
 };
 
 void DeltaHedge::setSymbol(std::string symbol) { this->symbol = symbol; };
@@ -83,3 +89,15 @@ ContractType DeltaHedge::typeconv(const char &type)
         return ContractType::PUT;
     };
 };
+
+bool DeltaHedge::is_valid_time()
+{
+    auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm *local_time = std::localtime(&now);
+
+    int current_minutes = local_time->tm_hour * 60 + local_time->tm_min;
+    int start_minutes = 9 * 60 + 30;
+    int end_minutes = 16 * 60 + 30;
+
+    return current_minutes >= start_minutes && current_minutes <= end_minutes;
+}

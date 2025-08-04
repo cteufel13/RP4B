@@ -12,6 +12,7 @@ public:
     void init();
     void run() override;
     void setHedgedOoption(OptionChain &optchain, float price);
+
     using TradingStrategy::getInterval;
     void setSymbol(std::string symbol);
 
@@ -24,4 +25,5 @@ private:
     bool initialized = false;
 
     ContractType typeconv(const char &type);
+    bool is_valid_time();
 };
