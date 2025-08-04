@@ -12,8 +12,9 @@ int main()
     MarketInterface marketinterface;
 
     logger.set_log_file("logs/run.log");
+    logger.info("Logger Initiated");
 
-    DeltaHedge strat = DeltaHedge(marketinterface, std::chrono::seconds(100));
+    DeltaHedge strat = DeltaHedge(marketinterface, std::chrono::seconds(10800));
     strat.setSymbol("SPY");
 
     scheduler.addTask([&strat]()
