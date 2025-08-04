@@ -14,7 +14,10 @@ target_include_directories(core
         ${CMAKE_SOURCE_DIR}/logging/include
         ${CMAKE_SOURCE_DIR}/api/include
         $<TARGET_PROPERTY:nlohmann_json::nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
-
 )
 
-target_link_libraries(core PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(core 
+    PRIVATE 
+        nlohmann_json::nlohmann_json
+        api  # <- ADD THIS LINE
+)

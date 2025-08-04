@@ -2,6 +2,7 @@
 #include <chrono>
 #include <functional>
 #include <vector>
+#include <atomic>
 
 struct Task
 {

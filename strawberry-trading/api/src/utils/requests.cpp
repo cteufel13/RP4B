@@ -161,11 +161,11 @@ std::string StockBarsRequest::to_fields() const
     j["symbols"] = symbols;
     j["timeframe"] = tframe.frame;
     if (start.has_value())
-        j["start"] = start;
+        j["start"] = start.value();
     if (end.has_value())
-        j["end"] = end;
+        j["end"] = end.value();
     if (limit.has_value())
-        j["limit"] = limit;
+        j["limit"] = limit.value();
 
     return to_query_string(j.dump());
 };
@@ -194,11 +194,11 @@ std::string OptionBarRequest::to_fields() const
     j["symbols"] = symbols;
     j["timeframe"] = tframe.frame;
     if (start.has_value())
-        j["start"] = start;
+        j["start"] = start.value();
     if (end.has_value())
-        j["end"] = end;
+        j["end"] = end.value();
     if (limit.has_value())
-        j["limit"] = limit;
+        j["limit"] = limit.value();
 
     return to_query_string(j.dump());
 };

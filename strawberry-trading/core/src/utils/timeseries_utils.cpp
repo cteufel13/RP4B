@@ -108,6 +108,8 @@ bool operator>=(const Date &lhs, const Date &rhs)
 
 std::ostream &operator<<(std::ostream &os, const Date &obj)
 {
-    os << "Date(" << obj.date << ")";
+   os << "Date(" << static_cast<int>(obj.date.year()) << "-" 
+       << static_cast<unsigned>(obj.date.month()) << "-" 
+       << static_cast<unsigned>(obj.date.day()) << ")";
     return os;
 }

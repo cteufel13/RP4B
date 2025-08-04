@@ -3,6 +3,9 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <ctime>
+#include <iomanip>
+
 
 Scheduler::Scheduler() : running(true) {};
 
@@ -22,7 +25,9 @@ void update_tasks(std::vector<Task> &tasks, const std::chrono::time_point<std::c
     {
         if (task.nextRun <= now)
         {
-            std::cout << "Time:" << now;
+            std::time_t time_t_now = std::chrono::system_clock::to_time_t(now);
+            std::cout << "Time: " << std::put_time(std::localtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
+
             task.func();
             std::cout << std::endl;
             task.nextRun = now + task.interval;

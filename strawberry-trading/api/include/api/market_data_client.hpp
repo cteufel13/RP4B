@@ -1,6 +1,8 @@
 #pragma once
 #include <http/http_client.hpp>
 #include <utils/requests.hpp>
+#include <memory>
+
 class MarketClient
 {
 public:
