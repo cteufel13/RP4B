@@ -22,9 +22,9 @@ void DeltaHedge::run()
 
         float current_stock_price = current_prices.at(0).values["close"];
         float current_delta = current_option.delta.value();
+        float rounded_delta = std::round(current_delta * 100.0) / 100.0;
         float stock_position = positions.at(0).qty;
-
-        float stock_to_move = -1 * stock_position - current_delta;
+        float stock_to_move = -1 * stock_position - rounded_delta * 100;
 
         if (stock_to_move < 0)
         {
@@ -56,11 +56,12 @@ void DeltaHedge::init()
 
     setHedgedOoption(init_optchain, init_stock_price);
     double init_delta = hedgedoption.value().delta.value();
+    double rounded_delta = std::round(init_delta * 100.0) / 100.0;
 
     market_.order(hedgedoption.value().name, 1);
-    market_.order(symbol, init_delta, std::nullopt, OrderSide::SELL);
+    market_.order(symbol, 100 * rounded_delta, std::nullopt, OrderSide::SELL);
 
-    Position stock_pos = Position(symbol, "stock", true, -1 * init_delta, init_stock_price, "short");
+    Position stock_pos = Position(symbol, "stock", true, -1 * rounded_delta * 100, init_stock_price, "short");
     Position option_pos = Position(hedgedoption.value().name, "option", true, 1.0, hedgedoption.value().premium.value(), "long");
 
     positions.push_back(stock_pos);
