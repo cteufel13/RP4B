@@ -29,12 +29,12 @@ void DeltaHedge::run()
         if (stock_to_move < 0)
         {
             stock_to_move *= -1;
-            // market_.order(symbol, stock_to_move, std::nullopt, OrderSide::SELL);
+            market_.order(symbol, stock_to_move, std::nullopt, OrderSide::SELL);
             positions.at(0).update(ActionType::SELL, std::abs(stock_to_move), current_stock_price);
         }
         else if (stock_to_move > 0)
         {
-            // market_.order(symbol, stock_to_move, std::nullopt, OrderSide::BUY);
+            market_.order(symbol, stock_to_move, std::nullopt, OrderSide::BUY);
             positions.at(0).update(ActionType::BUY, std::abs(stock_to_move), current_stock_price);
         }
         else
@@ -57,8 +57,8 @@ void DeltaHedge::init()
     setHedgedOoption(init_optchain, init_stock_price);
     double init_delta = hedgedoption.value().delta.value();
 
-    // market_.order(hedgedoption.value().name, 1);
-    // market_.order(symbol, init_delta, std::nullopt, OrderSide::SELL);
+    market_.order(hedgedoption.value().name, 1);
+    market_.order(symbol, init_delta, std::nullopt, OrderSide::SELL);
 
     Position stock_pos = Position(symbol, "stock", true, -1 * init_delta, init_stock_price, "short");
     Position option_pos = Position(hedgedoption.value().name, "option", true, 1.0, hedgedoption.value().premium.value(), "long");
